@@ -27,9 +27,9 @@ public final class ToolWechat{
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    private static String wxspAppid = "wxbf1695db9525b4ed";
+    private static String wxspAppid = "wxbf1695db9525b4ed";//瞎写的
 
-    private static String wxspSecret = "3444b156e2f2141456df6a226dce57a4";
+    private static String wxspSecret = "3444b156e2f2141456df6a226dce57a4";//瞎写的
 
     //获取 session_key 和 openid
     public static JSONObject getSession(final String code){
