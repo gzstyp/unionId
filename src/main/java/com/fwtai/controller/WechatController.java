@@ -1,4 +1,4 @@
-package cloud.dwz.controller;
+package com.fwtai.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fwtai.tool.AesCbcUtil;

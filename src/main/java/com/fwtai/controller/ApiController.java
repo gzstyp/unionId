@@ -1,15 +1,15 @@
-package cloud.dwz.controller;
+package com.fwtai.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fwtai.tool.ToolClient;
 import com.fwtai.tool.ToolWechat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * 获取unionId
@@ -24,13 +24,16 @@ import java.io.PrintWriter;
 @RestController
 public class ApiController{
 
+    @Resource
+    private ToolClient client;
+
     @GetMapping("/getSsessionKey")
     public void getSsessionKey(final HttpServletRequest request,final HttpServletResponse response){
         final String code = request.getParameter("code");
         System.out.println("code : "+code);
         final JSONObject jsonObject = ToolWechat.getSession(code);
-        final String json = queryJson(jsonObject);
-        responseJson(json,response);
+        final String json = client.queryJson(jsonObject);
+        client.responseJson(json,response);
     }
 
     @GetMapping("/unionId")
@@ -39,9 +42,9 @@ public class ApiController{
         final String encryptedData = request.getParameter("encryptedData");
         final String iv = request.getParameter("iv");
         final JSONObject jsonObject = ToolWechat.decrypt(encryptedData,session_key,iv);
-        final String json = queryJson(jsonObject);
+        final String json = client.queryJson(jsonObject);
         System.out.println(jsonObject);
-        responseJson(json,response);
+        client.responseJson(json,response);
     }
 
     // 推荐使用本接口
@@ -69,47 +72,11 @@ public class ApiController{
             final String unionId = result.getString("unionId");
             System.out.println("unionId->"+unionId);
             System.out.println(result);
-            final String json = queryJson(result);
-            responseJson(json,response);
+            final String json = client.queryJson(result);
+            client.responseJson(json,response);
         }else{
-            final String json = json(199,"参数有误");
-            responseJson(json,response);
+            final String json = client.json(199,"参数有误");
+            client.responseJson(json,response);
         }
-    }
-
-    public static void responseJson(final String json,final HttpServletResponse response){
-        response.setContentType("text/html;charset=utf-8");
-        response.setHeader("Cache-Control","no-cache");
-        PrintWriter writer = null;
-        try {
-            writer = response.getWriter();
-            writer.write(json);
-            writer.flush();
-        }catch (final IOException e){
-            e.printStackTrace();
-        }finally{
-            if(writer != null){
-                writer.close();
-                writer = null;
-            }
-        }
-    }
-
-    private String json(final int code,final String msg){
-        final JSONObject json = new JSONObject(2);
-        json.put("code",code);
-        json.put("msg",msg);
-        return json.toJSONString();
-    }
-
-    public String queryJson(final Object object){
-        if(object == null || object.toString().trim().length() <= 0){
-            return json(201,"暂无数据");
-        }
-        final JSONObject json = new JSONObject(3);
-        json.put("code",200);
-        json.put("msg","操作成功");
-        json.put("data",object);
-        return json.toJSONString();
     }
 }

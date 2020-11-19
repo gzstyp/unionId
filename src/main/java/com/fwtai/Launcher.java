@@ -1,4 +1,4 @@
-package cloud.dwz;
+package com.fwtai;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
