@@ -34,7 +34,7 @@ public class WechatController{
         final String iv = request.getParameter("iv");
         final String encryptedData = request.getParameter("encryptedData");
 
-        Map map = new HashMap();
+        final HashMap<String,Object> map = new HashMap<String,Object>();
 
         //登录凭证不能为空
         if (code == null || code.length() == 0) {
@@ -72,7 +72,7 @@ public class WechatController{
 
                 final JSONObject userInfoJSON = JSONObject.parseObject(result);
                 System.out.println(userInfoJSON);
-                Map userInfo = new HashMap();
+                final HashMap<String,Object> userInfo = new HashMap<String,Object>();
                 userInfo.put("openId", userInfoJSON.get("openId"));
                 userInfo.put("nickName", userInfoJSON.get("nickName"));
                 userInfo.put("gender", userInfoJSON.get("gender"));
